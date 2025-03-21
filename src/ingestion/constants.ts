@@ -1,0 +1,2 @@
+export const INGESTION_SERVICE = 'INGESTION_SERVICE';
+export const INGESTION_PORT = 3001;
