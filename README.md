@@ -57,42 +57,99 @@ $ npm run test:e2e
 $ npm run test:cov
 ```
 
-## Deployment
+````markdown
+# Document Management System
 
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
+---
 
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
+## **Project Setup & Basic Configuration (2-3 hours)**
 
-```bash
-$ npm install -g mau
-$ mau deploy
+- **NestJS Project Setup**:  
+  Initialized a TypeScript-based NestJS project using `@nestjs/cli`.
+- **PostgreSQL & TypeORM Configuration**:  
+  Integrated PostgreSQL with TypeORM for database management. Configured entities, repositories, and database connections.
+- **JWT Authentication**:  
+  Implemented JWT-based authentication using `@nestjs/jwt` and `passport-jwt`. Configured role-based access control (RBAC) via guards.
+
+---
+
+## **User & Authentication APIs (3-4 hours)**
+
+- **Endpoints**:
+  - `POST /auth/register`: Register users with email, password, and role (Admin/Editor/Viewer).
+  - `POST /auth/login`: Generate JWT tokens after validating credentials.
+  - `POST /auth/logout`: Token invalidation logic (optional).
+- **Security Features**:
+  - Password hashing using `bcrypt`.
+  - Role-based route protection (e.g., Admins can delete documents).
+- **Database Models**:  
+  Created `User` entity with TypeORM, including `id`, `email`, `password`, `role`, and timestamps.
+
+---
+
+## **Document Management APIs (3-4 hours)**
+
+- **CRUD Operations**:
+  - `POST /documents`: Upload documents and store metadata (title, owner, file path).
+  - `GET /documents`: Retrieve all documents (filtered by user role).
+  - `GET /documents/:id`: Fetch a single document.
+  - `PATCH /documents/:id`: Update document metadata (Editors/Admins only).
+  - `DELETE /documents/:id`: Delete documents (Admins only).
+- **Database Integration**:  
+  Stored document metadata in PostgreSQL using TypeORM `Document` entity.
+
+---
+
+## **Ingestion Control & Python Communication (4-5 hours)**
+
+- **Ingestion Trigger API**:  
+  Implemented `POST /ingest/:documentId` to call a Python API/mock service for document processing.
+- **Status Tracking**:  
+  Created `IngestionLog` entity to track progress (`PENDING`, `PROCESSING`, `COMPLETED`, `FAILED`).
+- **Management API**:  
+  Added `GET /ingest/status/:documentId` to check ingestion status.
+- **Error Handling**:  
+  Implemented retry logic for failed ingestions and stored error messages.
+
+---
+
+## **Testing & API Documentation (3-4 hours)**
+
+- **Unit Tests**:  
+  Wrote tests for auth, document, and ingestion APIs using Jest and `@nestjs/testing`.
+- **Swagger Documentation**:  
+  Integrated Swagger/OpenAPI with `@nestjs/swagger` for auto-generated API docs.  
+  Added decorators (`@ApiTags`, `@ApiResponse`) and security definitions.
+- **Load Testing**:  
+  Optional: Used tools like Artillery or Postman Runner for basic performance testing.
+
+---
+
+## **How to Run**
+
+1. Clone the repository.
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
+````
+
+3. Configure `.env` file:
+   ```env
+   DATABASE_URL=postgresql://user:password@localhost:5432/db_name
+   JWT_SECRET=your_jwt_secret
+   JWT_EXPIRES_IN=3600s
+   ```
+4. Start the server:
+   ```bash
+   npm run start:dev
+   ```
+5. Access Swagger docs at `http://localhost:3000/api`.
+
+---
+
+**Technologies Used**: NestJS, TypeORM, PostgreSQL, JWT, Swagger, Jest.
+
 ```
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
-
-## Resources
-
-Check out a few resources that may come in handy when working with NestJS:
-
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
-
-## Support
-
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+```
