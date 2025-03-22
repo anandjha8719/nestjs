@@ -103,18 +103,174 @@ $ npm run test:cov
 
 ## **Ingestion Control & Python Communication**
 
-- **Ingestion Trigger API**:
-  Implemented `POST /ingest/:documentId` to call a Python API/mock service for document processing.
-- **Status Tracking**:
-  Created `IngestionLog` entity to track progress (`PENDING`, `PROCESSING`, `COMPLETED`, `FAILED`).
-- **Management API**:
-  Added `GET /ingest/status/:documentId` to check ingestion status.
-- **Error Handling**:
-  Implemented retry logic for failed ingestions and stored error messages.
+# Document Ingestion System with NestJS Microservice
 
----
+## Overview
 
-## **Testing & API Documentation (3-4 hours)**
+This project implements a document ingestion system using NestJS with a microservice architecture to simulate Python backend functionality. The system allows users to upload documents, process them through a simulated ingestion pipeline, and track the status of the ingestion process.
+
+## Architecture
+
+The application consists of two main components:
+
+1. **Main NestJS Application** - Handles HTTP requests, document uploads, and user authentication
+2. **Ingestion Microservice** - Simulates a Python backend for document processing
+
+## Communication Flow
+
+### Main NestJS Application to Ingestion Microservice
+
+The system uses NestJS's built-in microservice capabilities with TCP transport to facilitate communication between the main application and the ingestion service.
+
+```
+┌─────────────────────┐         ┌─────────────────────┐
+│                     │         │                     │
+│     Main NestJS     │ ◄─────► │      Ingestion      │
+│     Application     │   TCP   │    Microservice     │
+│                     │         │                     │
+└─────────────────────┘         └─────────────────────┘
+```
+
+## How It Works
+
+### 1. Document Upload and Storage
+
+- Users upload documents through the `/documents` endpoint
+- Files are stored on disk using Multer
+- Document metadata is saved in a PostgreSQL database
+
+### 2. Triggering Document Ingestion
+
+When a user triggers ingestion through the `/documents/:id/ingest` endpoint:
+
+1. `DocumentsService` marks the document as "PROCESSING" in the database
+2. It sends a message to the Ingestion Microservice using the ClientProxy
+   ```typescript
+   this.client.send({ cmd: 'start_ingestion' }, document);
+   ```
+
+### 3. Microservice Processing Simulation
+
+The Ingestion Microservice:
+
+1. Receives the document data
+2. Adds it to an in-memory processing queue
+3. Uses `setTimeout` to simulate processing time (5-10 seconds)
+4. Randomly succeeds (80% chance) or fails (20% chance)
+5. Updates the document status in its internal storage
+
+```typescript
+const processingTime = 5000 + Math.random() * 5000;
+const willSucceed = Math.random() < 0.8;
+```
+
+### 4. Status Checking
+
+- Users can check ingestion status via `/documents/:id/status` endpoint
+- The main application queries the microservice for status updates
+- The microservice returns the current status from its in-memory store
+- When processing completes, the main application updates the database with the final status
+
+```typescript
+async getIngestionStatus(id: number) {
+  const response = await firstValueFrom(
+    this.client.send({ cmd: 'get_status' }, id),
+  );
+  if (response.status === 'completed' || response.status === 'failed') {
+  }
+  return response;
+}
+```
+
+### 5. Retry Mechanism
+
+- Failed ingestions can be retried via `/documents/:id/retry` endpoint
+- The system resets the retry count and triggers ingestion again
+
+## Key Components
+
+### Microservice Registration
+
+Both the main application and the microservice register the TCP connection:
+
+```typescript
+ClientsModule.register([
+  {
+    name: INGESTION_SERVICE,
+    transport: Transport.TCP,
+    options: {
+      host: 'localhost',
+      port: INGESTION_PORT,
+    },
+  },
+]),
+```
+
+### Microservice Message Patterns
+
+The ingestion microservice listens for specific message patterns:
+
+```typescript
+@MessagePattern({ cmd: 'start_ingestion' })
+async handleIngestion(@Payload() document: Document) {
+  await this.ingestionService.startIngestion(document);
+  return { received: true };
+}
+
+@MessagePattern({ cmd: 'get_status' })
+async handleStatusCheck(@Payload() documentId: number) {
+  return this.ingestionService.getStatus(documentId);
+}
+```
+
+### In-Memory Status Tracking
+
+The microservice uses Maps to track processing jobs and status:
+
+```typescript
+private processingQueue = new Map<number, NodeJS.Timeout>();
+private statusStore = new Map<number, any>();
+```
+
+## Running the Application
+
+The system requires two separate processes:
+
+1. The main NestJS application:
+
+   ```
+   npm run start
+   ```
+
+2. The ingestion microservice:
+   ```
+   npm run start:ingestion
+   ```
+
+## Simulating Python Backend
+
+This implementation effectively simulates a Python backend by:
+
+1. **Decoupling Processing Logic**: The document processing is completely separated from the main application
+2. **Asynchronous Communication**: Using message-based communication similar to how you would call a Python service
+3. **Realistic Timing**: Adding randomized processing times to simulate real-world behavior
+4. **Error Simulation**: Randomly generating failures to test error handling
+5. **Stateful Processing**: Maintaining processing state across separate services
+
+## Security Considerations
+
+The system implements:
+
+- JWT Authentication
+- Role-based access control
+- File type validation
+- Size limits for uploads
+
+## Additional Notes
+
+## This mocking approach allows for complete testing of the document ingestion workflow without implementing actual document parsing, vectorization, or embedding generation that would typically be handled by a Python service.
+
+## **Testing & API Documentation**
 
 - **Unit Tests**:
   Wrote tests for auth, document, and ingestion APIs using Jest and `@nestjs/testing`.
@@ -129,3 +285,4 @@ $ npm run test:cov
 ---
 
 **Technologies Used**: NestJS, TypeORM, PostgreSQL, JWT, Swagger, Jest.
+````
