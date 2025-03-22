@@ -1,11 +1,11 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { DocumentsController } from './documents.controller';
-import { DocumentsService } from './documents.service';
-import { CreateDocumentDto } from './dto/create-document.dto';
+import { DocumentsController } from '../documents.controller';
+import { DocumentsService } from '../documents.service';
+import { CreateDocumentDto } from '../dto/create-document.dto';
 import { BadRequestException } from '@nestjs/common';
-import { Document } from './entities/document.entity';
-import { RolesGuard } from '../auth/roles.guard';
-import { JwtAuthGuard } from '../auth/jwt-auth.guard';
+import { Document } from '../entities/document.entity';
+import { RolesGuard } from '../../auth/roles.guard';
+import { JwtAuthGuard } from '../../auth/jwt-auth.guard';
 
 describe('DocumentsController', () => {
   let controller: DocumentsController;
