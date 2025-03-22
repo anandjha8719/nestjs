@@ -27,22 +27,23 @@
 
 ## Project setup
 
-```bash
-$ npm install
-```
+## **How to Run**
 
-## Compile and run the project
+1. Clone the repository.
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
 
-```bash
-# development
-$ npm run start
+````
 
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
-```
+3. Configure `.env` file as the .env.example.
+4. Start the server:
+   ```bash
+   npm run start:dev
+   ```
+5. Access Swagger docs at `http://localhost:3000/api`.
+````
 
 ## Run tests
 
@@ -62,18 +63,18 @@ $ npm run test:cov
 
 ---
 
-## **Project Setup & Basic Configuration (2-3 hours)**
+## **Project Setup & Basic Configuration**
 
-- **NestJS Project Setup**:  
+- **NestJS Project Setup**:
   Initialized a TypeScript-based NestJS project using `@nestjs/cli`.
-- **PostgreSQL & TypeORM Configuration**:  
+- **PostgreSQL & TypeORM Configuration**:
   Integrated PostgreSQL with TypeORM for database management. Configured entities, repositories, and database connections.
-- **JWT Authentication**:  
+- **JWT Authentication**:
   Implemented JWT-based authentication using `@nestjs/jwt` and `passport-jwt`. Configured role-based access control (RBAC) via guards.
 
 ---
 
-## **User & Authentication APIs (3-4 hours)**
+## **User & Authentication APIs**
 
 - **Endpoints**:
   - `POST /auth/register`: Register users with email, password, and role (Admin/Editor/Viewer).
@@ -82,12 +83,12 @@ $ npm run test:cov
 - **Security Features**:
   - Password hashing using `bcrypt`.
   - Role-based route protection (e.g., Admins can delete documents).
-- **Database Models**:  
+- **Database Models**:
   Created `User` entity with TypeORM, including `id`, `email`, `password`, `role`, and timestamps.
 
 ---
 
-## **Document Management APIs (3-4 hours)**
+## **Document Management APIs**
 
 - **CRUD Operations**:
   - `POST /documents`: Upload documents and store metadata (title, owner, file path).
@@ -95,61 +96,36 @@ $ npm run test:cov
   - `GET /documents/:id`: Fetch a single document.
   - `PATCH /documents/:id`: Update document metadata (Editors/Admins only).
   - `DELETE /documents/:id`: Delete documents (Admins only).
-- **Database Integration**:  
-  Stored document metadata in PostgreSQL using TypeORM `Document` entity.
+- **Database Integration**:
+  Stored document metadata in PostgreSQL (neonDB) using TypeORM `Document` entity.
 
 ---
 
-## **Ingestion Control & Python Communication (4-5 hours)**
+## **Ingestion Control & Python Communication**
 
-- **Ingestion Trigger API**:  
+- **Ingestion Trigger API**:
   Implemented `POST /ingest/:documentId` to call a Python API/mock service for document processing.
-- **Status Tracking**:  
+- **Status Tracking**:
   Created `IngestionLog` entity to track progress (`PENDING`, `PROCESSING`, `COMPLETED`, `FAILED`).
-- **Management API**:  
+- **Management API**:
   Added `GET /ingest/status/:documentId` to check ingestion status.
-- **Error Handling**:  
+- **Error Handling**:
   Implemented retry logic for failed ingestions and stored error messages.
 
 ---
 
 ## **Testing & API Documentation (3-4 hours)**
 
-- **Unit Tests**:  
+- **Unit Tests**:
   Wrote tests for auth, document, and ingestion APIs using Jest and `@nestjs/testing`.
-- **Swagger Documentation**:  
-  Integrated Swagger/OpenAPI with `@nestjs/swagger` for auto-generated API docs.  
+- **Swagger Documentation**:
+  Integrated Swagger/OpenAPI with `@nestjs/swagger` for auto-generated API docs.
   Added decorators (`@ApiTags`, `@ApiResponse`) and security definitions.
-- **Load Testing**:  
+- **Load Testing**:
   Optional: Used tools like Artillery or Postman Runner for basic performance testing.
 
 ---
 
-## **How to Run**
-
-1. Clone the repository.
-2. Install dependencies:
-   ```bash
-   npm install
-   ```
-````
-
-3. Configure `.env` file:
-   ```env
-   DATABASE_URL=postgresql://user:password@localhost:5432/db_name
-   JWT_SECRET=your_jwt_secret
-   JWT_EXPIRES_IN=3600s
-   ```
-4. Start the server:
-   ```bash
-   npm run start:dev
-   ```
-5. Access Swagger docs at `http://localhost:3000/api`.
-
 ---
 
 **Technologies Used**: NestJS, TypeORM, PostgreSQL, JWT, Swagger, Jest.
-
-```
-
-```
