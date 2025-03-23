@@ -56,9 +56,8 @@ $ npm run test:e2e
 
 # test coverage
 $ npm run test:cov
-
-````markdown
-# Document Management System
+```
+## Document Management System
 
 
 ## **Project Setup & Basic Configuration**
@@ -275,9 +274,6 @@ The system implements:
 - **Load Testing**:
   Optional: Used tools like Artillery or Postman Runner for basic performance testing.
 
----
-
----
 
 **Technologies Used**: NestJS, TypeORM, PostgreSQL, JWT, Swagger, Jest.
-````
+
