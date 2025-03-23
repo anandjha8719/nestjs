@@ -35,7 +35,7 @@
    npm install
    ```
 
-````
+
 
 3. Configure `.env` file as the .env.example.
 4. Start the server:
@@ -43,7 +43,7 @@
    npm run start:dev
    ```
 5. Access Swagger docs at `http://localhost:3000/api`.
-````
+
 
 ## Run tests
 
@@ -56,12 +56,10 @@ $ npm run test:e2e
 
 # test coverage
 $ npm run test:cov
-```
 
 ````markdown
 # Document Management System
 
----
 
 ## **Project Setup & Basic Configuration**
 
@@ -72,7 +70,6 @@ $ npm run test:cov
 - **JWT Authentication**:
   Implemented JWT-based authentication using `@nestjs/jwt` and `passport-jwt`. Configured role-based access control (RBAC) via guards.
 
----
 
 ## **User & Authentication APIs**
 
@@ -86,7 +83,7 @@ $ npm run test:cov
 - **Database Models**:
   Created `User` entity with TypeORM, including `id`, `email`, `password`, `role`, and timestamps.
 
----
+
 
 ## **Document Management APIs**
 
@@ -99,9 +96,7 @@ $ npm run test:cov
 - **Database Integration**:
   Stored document metadata in PostgreSQL (neonDB) using TypeORM `Document` entity.
 
----
 
-## **Ingestion Control & Python Communication**
 
 # Document Ingestion System with NestJS Microservice
 
@@ -122,14 +117,14 @@ The application consists of two main components:
 
 The system uses NestJS's built-in microservice capabilities with TCP transport to facilitate communication between the main application and the ingestion service.
 
-```
+
 ┌─────────────────────┐         ┌─────────────────────┐
 │                     │         │                     │
 │     Main NestJS     │ ◄─────► │      Ingestion      │
 │     Application     │   TCP   │    Microservice     │
 │                     │         │                     │
 └─────────────────────┘         └─────────────────────┘
-```
+
 
 ## How It Works
 
@@ -162,7 +157,7 @@ The Ingestion Microservice:
 ```typescript
 const processingTime = 5000 + Math.random() * 5000;
 const willSucceed = Math.random() < 0.8;
-```
+
 
 ### 4. Status Checking
 
