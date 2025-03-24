@@ -24,7 +24,7 @@ describe('IngestionService', () => {
 
     await service.startIngestion(document);
     expect(service.getStatus(1)).toMatchObject({
-      status: 'processing',
+      status: 'PROCESSING',
       progress: 0,
     });
 
@@ -39,7 +39,7 @@ describe('IngestionService', () => {
 
     jest.runAllTimers();
     expect(service.getStatus(2)).toMatchObject({
-      status: 'completed',
+      status: 'COMPLETED',
       progress: 100,
     });
 
@@ -54,7 +54,7 @@ describe('IngestionService', () => {
 
     jest.runAllTimers();
     expect(service.getStatus(3)).toMatchObject({
-      status: 'failed',
+      status: 'FAILED',
       message: 'Mock processing failure',
     });
 
@@ -73,13 +73,13 @@ describe('IngestionService', () => {
 
     await service.startIngestion(document);
     expect(service.getStatus(4)).toMatchObject({
-      status: 'processing',
+      status: 'PROCESSING',
       progress: 0,
     });
 
     await service.startIngestion(document);
     expect(service.getStatus(4)).toMatchObject({
-      status: 'processing',
+      status: 'PROCESSING',
       progress: 0,
     });
 

@@ -97,9 +97,9 @@ export class DocumentsService {
   async triggerIngestion(documentId: number) {
     const document = await this.findOne(documentId);
 
-    document.lastProcessedAt = new Date();
-    document.status = DocumentStatus.PROCESSING;
-    await this.documentsRepository.save(document);
+    // document.lastProcessedAt = new Date();
+    // document.status = DocumentStatus.PROCESSING;
+    // await this.documentsRepository.save(document);
     this.client.send({ cmd: 'start_ingestion' }, document).subscribe({
       next: () => console.log(`Ingestion started for doc ${documentId}`),
       error: (err) => console.error('Microservice error:', err),
