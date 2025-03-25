@@ -41,9 +41,10 @@
 
 
 3. Configure `.env` file as the .env.example.
-4. Start the server:
+4. Start the server (main server and mock ingestion micro-service):
    ```bash
    npm run start:dev
+   npm run start:ingestion
    ```
 5. Access Swagger docs at `http://localhost:3000/api`.
 
