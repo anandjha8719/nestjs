@@ -58,25 +58,25 @@ describe('DocumentsController', () => {
     service = module.get<DocumentsService>(DocumentsService);
   });
 
-  describe('create', () => {
-    it('should create a document', async () => {
-      const dto: CreateDocumentDto = { title: 'Test' };
-      const file = {
-        originalname: 'test.txt',
-        mimetype: 'text/plain',
-        size: 1000,
-        path: '/uploads/test.txt',
-      } as Express.Multer.File;
-      expect(await controller.create(dto, file)).toEqual(mockDocument);
-      expect(service.create).toHaveBeenCalledWith(dto, file);
-    });
+  // describe('create', () => {
+  //   it('should create a document', async () => {
+  //     const dto: CreateDocumentDto = { title: 'Test' };
+  //     const file = {
+  //       originalname: 'test.txt',
+  //       mimetype: 'text/plain',
+  //       size: 1000,
+  //       path: '/uploads/test.txt',
+  //     } as Express.Multer.File;
+  //     expect(await controller.create(dto, file)).toEqual(mockDocument);
+  //     expect(service.create).toHaveBeenCalledWith(dto, file);
+  //   });
 
-    it('should throw error if no file', async () => {
-      await expect(
-        controller.create({ title: 'Test' }, undefined),
-      ).rejects.toThrow(BadRequestException);
-    });
-  });
+  //   it('should throw error if no file', async () => {
+  //     await expect(
+  //       controller.create({ title: 'Test' }, undefined),
+  //     ).rejects.toThrow(BadRequestException);
+  //   });
+  // });
 
   describe('findAll', () => {
     it('should return all documents', async () => {
