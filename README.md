@@ -96,6 +96,9 @@ $ npm run test:cov
   - `GET /documents/:id`: Fetch a single document.
   - `PATCH /documents/:id`: Update document metadata (Editors/Admins only).
   - `DELETE /documents/:id`: Delete documents (Admins only).
+  - `POST /documents/:id/ingest`: Start document Ingestion (Admins/Editors only).
+  - `POST /documents/:id/retry`: Retry document Ingestion (Admins/Editors only).
+  - `GET /documents/:id/status`: Get document Ingestion status.
 - **Database Integration**:
   Stored document metadata in PostgreSQL (neonDB) using TypeORM `Document` entity.
 
