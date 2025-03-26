@@ -22,12 +22,15 @@ import { UpdateDocumentDto } from './dto/update-document.dto';
 import { diskStorage } from 'multer';
 import * as path from 'path';
 import {
-  ApiBody,
-  ApiConsumes,
-  ApiOperation,
-  ApiParam,
-  ApiResponse,
-} from '@nestjs/swagger';
+  ApiDeleteDocument,
+  ApiGetAllDocuments,
+  ApiGetDocumentById,
+  ApiGetIngestionStatus,
+  ApiRetryIngestion,
+  ApiTriggerIngestion,
+  ApiUpdateDocument,
+  ApiUploadDocument,
+} from './api-docs/documents.swagger';
 
 @Controller('documents')
 @UseGuards(JwtAuthGuard)
@@ -35,28 +38,7 @@ export class DocumentsController {
   constructor(private readonly documentsService: DocumentsService) {}
 
   @Post()
-  @ApiConsumes('multipart/form-data')
-  @ApiBody({
-    schema: {
-      type: 'object',
-      properties: {
-        title: {
-          type: 'string',
-          description: 'Document title',
-        },
-        file: {
-          type: 'string',
-          format: 'binary',
-          description: 'File to upload',
-        },
-      },
-    },
-  })
-  @ApiOperation({
-    summary: 'Upload a file with title',
-    description:
-      'Receives form-data with title(text) & file(file). Requires a valid JWT token obtained from the login endpoint.',
-  })
+  @ApiUploadDocument()
   @UseGuards(RolesGuard)
   @Roles(Role.ADMIN, Role.EDITOR)
   @UseInterceptors(
@@ -98,64 +80,19 @@ export class DocumentsController {
   }
 
   @Get()
-  @ApiOperation({
-    summary: 'Retrieve all documents',
-    description: 'Fetches a list of all documents. Requires valid JWT token.',
-  })
-  @ApiResponse({
-    status: 200,
-    description: 'Successfully retrieved documents list',
-  })
+  @ApiGetAllDocuments()
   findAll() {
     return this.documentsService.findAll();
   }
 
   @Get(':id')
-  @ApiOperation({
-    summary: 'Get a specific document by ID',
-    description: 'Retrieves details of a document by its unique identifier',
-  })
-  @ApiParam({
-    name: 'id',
-    type: 'number',
-    description: 'Unique identifier of the document',
-    required: true,
-    example: 1,
-  })
-  @ApiResponse({
-    status: 200,
-    description: 'Document found successfully',
-  })
-  @ApiResponse({
-    status: 404,
-    description: 'Document not found',
-  })
+  @ApiGetDocumentById()
   findOne(@Param('id') id: string) {
     return this.documentsService.findOne(+id);
   }
 
   @Patch(':id')
-  @ApiOperation({
-    summary: 'Update a document',
-    description:
-      'Updates an existing document. Restricted to Admin and Editor roles.',
-  })
-  @ApiParam({
-    name: 'id',
-    type: 'number',
-    description: 'Unique identifier of the document to update',
-    required: true,
-    example: 1,
-  })
-  @ApiBody({ type: UpdateDocumentDto })
-  @ApiResponse({
-    status: 200,
-    description: 'Document updated successfully',
-  })
-  @ApiResponse({
-    status: 403,
-    description: 'Forbidden - Insufficient permissions',
-  })
+  @ApiUpdateDocument()
   @UseGuards(RolesGuard)
   @Roles(Role.ADMIN, Role.EDITOR)
   update(
@@ -166,26 +103,7 @@ export class DocumentsController {
   }
 
   @Delete(':id')
-  @ApiOperation({
-    summary: 'Delete a document',
-    description:
-      'Permanently removes a document. Restricted to Admin role only.',
-  })
-  @ApiParam({
-    name: 'id',
-    type: 'number',
-    description: 'Unique identifier of the document to delete',
-    required: true,
-    example: 1,
-  })
-  @ApiResponse({
-    status: 200,
-    description: 'Document deleted successfully',
-  })
-  @ApiResponse({
-    status: 403,
-    description: 'Forbidden - Insufficient permissions',
-  })
+  @ApiDeleteDocument()
   @UseGuards(RolesGuard)
   @Roles(Role.ADMIN)
   remove(@Param('id') id: string) {
@@ -193,26 +111,7 @@ export class DocumentsController {
   }
 
   @Post(':id/ingest')
-  @ApiOperation({
-    summary: 'Trigger document ingestion',
-    description:
-      'Initiates the ingestion process for a specific document. Restricted to Admin and Editor roles.',
-  })
-  @ApiParam({
-    name: 'id',
-    type: 'number',
-    description: 'Unique identifier of the document to ingest',
-    required: true,
-    example: 1,
-  })
-  @ApiResponse({
-    status: 200,
-    description: 'Ingestion process started successfully',
-  })
-  @ApiResponse({
-    status: 403,
-    description: 'Forbidden - Insufficient permissions',
-  })
+  @ApiTriggerIngestion()
   @UseGuards(RolesGuard)
   @Roles(Role.ADMIN, Role.EDITOR)
   triggerIngestion(@Param('id') id: string) {
@@ -220,26 +119,7 @@ export class DocumentsController {
   }
 
   @Post(':id/retry')
-  @ApiOperation({
-    summary: 'Retry document ingestion',
-    description:
-      'Retries the ingestion process for a document that previously failed. Restricted to Admin and Editor roles.',
-  })
-  @ApiParam({
-    name: 'id',
-    type: 'number',
-    description: 'Unique identifier of the document to retry ingestion',
-    required: true,
-    example: 1,
-  })
-  @ApiResponse({
-    status: 200,
-    description: 'Ingestion retry initiated successfully',
-  })
-  @ApiResponse({
-    status: 403,
-    description: 'Forbidden - Insufficient permissions',
-  })
+  @ApiRetryIngestion()
   @UseGuards(RolesGuard)
   @Roles(Role.ADMIN, Role.EDITOR)
   retryIngestion(@Param('id') id: string) {
@@ -247,22 +127,7 @@ export class DocumentsController {
   }
 
   @Get(':id/status')
-  @ApiOperation({
-    summary: 'Get document ingestion status',
-    description:
-      'Retrieves the current ingestion status of a specific document',
-  })
-  @ApiParam({
-    name: 'id',
-    type: 'number',
-    description: 'Unique identifier of the document',
-    required: true,
-    example: 1,
-  })
-  @ApiResponse({
-    status: 200,
-    description: 'Ingestion status retrieved successfully',
-  })
+  @ApiGetIngestionStatus()
   getIngestionStatus(@Param('id') id: string) {
     return this.documentsService.getIngestionStatus(+id);
   }
