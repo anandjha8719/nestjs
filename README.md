@@ -21,6 +21,9 @@
   <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
   [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
 
+![image](https://github.com/user-attachments/assets/46f80654-795a-4359-8477-37e5233ed763)
+
+
 ## Description
 
 [Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
@@ -38,9 +41,10 @@
 
 
 3. Configure `.env` file as the .env.example.
-4. Start the server:
+4. Start the server (main server and mock ingestion micro-service):
    ```bash
    npm run start:dev
+   npm run start:ingestion
    ```
 5. Access Swagger docs at `http://localhost:3000/api`.
 
@@ -92,6 +96,9 @@ $ npm run test:cov
   - `GET /documents/:id`: Fetch a single document.
   - `PATCH /documents/:id`: Update document metadata (Editors/Admins only).
   - `DELETE /documents/:id`: Delete documents (Admins only).
+  - `POST /documents/:id/ingest`: Start document Ingestion (Admins/Editors only).
+  - `POST /documents/:id/retry`: Retry document Ingestion (Admins/Editors only).
+  - `GET /documents/:id/status`: Get document Ingestion status.
 - **Database Integration**:
   Stored document metadata in PostgreSQL (neonDB) using TypeORM `Document` entity.
 
