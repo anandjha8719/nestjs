@@ -39,10 +39,10 @@ export class UsersService {
     return result;
   }
 
-  async findAll(): Promise<Omit<User, 'password'>[]> {
-    const users = await this.usersRepository.find();
-    return users.map(({ password, ...rest }) => rest);
-  }
+  // async findAll(): Promise<Omit<User, 'password'>[]> {
+  //   const users = await this.usersRepository.find();
+  //   return users.map(({ password, ...rest }) => rest);
+  // }
 
   async findOne(id: number): Promise<Omit<User, 'password'>> {
     const user = await this.usersRepository.findOne({

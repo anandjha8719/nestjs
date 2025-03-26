@@ -4,7 +4,6 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
 import { DocumentsModule } from './documents/documents.module';
-// import { PythonIngestionModule } from './python-ingestion/python-ingestion.module';
 
 @Module({
   imports: [
@@ -22,16 +21,15 @@ import { DocumentsModule } from './documents/documents.module';
         password: configService.get('DATABASE_PASSWORD'),
         database: configService.get('DATABASE_NAME'),
         entities: [__dirname + '/**/*.entity{.ts,.js}'],
-        synchronize: true, // Set to false in production
+        synchronize: true, //TODO: Set to false in production
         ssl: {
-          rejectUnauthorized: false, // Required for Neon DB
+          rejectUnauthorized: false,
         },
       }),
     }),
     UsersModule,
     AuthModule,
     DocumentsModule,
-    // PythonIngestionModule,
   ],
 })
 export class AppModule {}
