@@ -19,7 +19,34 @@ export const ApiCreateUser = () => {
       summary: 'Create a new user',
       description: 'Create a user account (Admin only)',
     }),
-    ApiBody({ type: CreateUserDto, description: 'User creation details' }),
+    ApiBody({
+      schema: {
+        type: 'object',
+        required: ['email', 'password'],
+        properties: {
+          email: {
+            type: 'string',
+            example: 'anand@test.com',
+            description: 'User email (Required)',
+          },
+          password: {
+            type: 'string',
+            example: 'pass12345',
+            description: 'User password (Required)',
+          },
+          name: {
+            type: 'string',
+            example: 'Anand',
+            description: 'User name (Optional)',
+          },
+          role: {
+            type: 'string',
+            example: 'ADMIN',
+            description: 'Role of user (Optional, default: EDITOR)',
+          },
+        },
+      },
+    }),
     ApiResponse({ status: 201, description: 'User successfully created' }),
     ApiResponse({
       status: 403,

@@ -31,7 +31,7 @@ export const ApiRegister = () => {
           name: {
             type: 'string',
             example: 'Anand',
-            description: 'User first name (Optional)',
+            description: 'User name (Optional)',
           },
           role: {
             type: 'string',
