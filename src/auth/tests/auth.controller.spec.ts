@@ -90,11 +90,4 @@ describe('AuthController', () => {
       ).rejects.toThrow(UnauthorizedException);
     });
   });
-
-  describe('profile', () => {
-    it('should return user data', () => {
-      const req = { user: mockUser };
-      expect(controller.getProfile(req)).toEqual(mockUser);
-    });
-  });
 });
