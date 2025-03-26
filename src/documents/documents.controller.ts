@@ -79,6 +79,7 @@ export class DocumentsController {
     return this.documentsService.create(createDocumentDto, file);
   }
 
+  // TODO: add cursor based pagignation
   @Get()
   @ApiGetAllDocuments()
   findAll() {

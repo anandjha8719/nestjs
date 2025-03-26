@@ -96,34 +96,14 @@ export class DocumentsService {
 
   async triggerIngestion(documentId: number) {
     const document = await this.findOne(documentId);
-
-    // document.lastProcessedAt = new Date();
-    // document.status = DocumentStatus.PROCESSING;
-    // await this.documentsRepository.save(document);
-    this.client.send({ cmd: 'start_ingestion' }, document).subscribe({
-      next: () => console.log(`Ingestion started for doc ${documentId}`),
-      error: (err) => console.error('Microservice error:', err),
-    });
-
-    return { message: 'Ingestion initiated' };
+    const response = await firstValueFrom(
+      this.client.send({ cmd: 'start_ingestion' }, document),
+    );
+    console.log(`Ingestion response for doc ${documentId}:`, response);
+    return response;
   }
 
   async retryIngestion(id: number) {
-    const document = await this.findOne(id);
-
-    if (document.status === DocumentStatus.PROCESSING) {
-      throw new BadRequestException('Document is already being processed');
-    }
-
-    // Reset retry count if it was previously marked as failed
-    if (document.status === DocumentStatus.FAILED) {
-      await this.documentsRepository.update(id, {
-        retryCount: 0,
-        status: DocumentStatus.PENDING,
-        statusMessage: 'Retrying ingestion',
-      });
-    }
-
     return this.triggerIngestion(id);
   }
 

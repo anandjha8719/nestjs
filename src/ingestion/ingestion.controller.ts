@@ -9,12 +9,11 @@ export class IngestionController {
 
   @MessagePattern({ cmd: 'start_ingestion' })
   async handleIngestion(@Payload() document: Document) {
-    await this.ingestionService.startIngestion(document);
-    return { received: true };
+    return this.ingestionService.startIngestion(document);
   }
 
   @MessagePattern({ cmd: 'get_status' })
-  async handleStatusCheck(@Payload() documentId: number) {
+  handleStatusCheck(@Payload() documentId: number) {
     return this.ingestionService.getStatus(documentId);
   }
 }

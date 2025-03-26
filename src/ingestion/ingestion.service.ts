@@ -6,7 +6,9 @@ export class IngestionService {
   private processingQueue = new Map<number, NodeJS.Timeout>();
   private statusStore = new Map<number, any>();
 
-  async startIngestion(document: Document): Promise<void> {
+  startIngestion(
+    document: Document,
+  ): Promise<{ status: string; message: string; documentId: number }> {
     if (this.processingQueue.has(document.id)) {
       clearTimeout(this.processingQueue.get(document.id));
     }
@@ -37,11 +39,23 @@ export class IngestionService {
     }, processingTime);
 
     this.processingQueue.set(document.id, timeout);
+    return Promise.resolve({
+      status: 'PROCESSING',
+      message: 'Ingestion started successfully',
+      documentId: document.id,
+    });
   }
 
-  getStatus(documentId: number) {
+  getStatus(documentId: number): {
+    status: string;
+    message?: string;
+    documentId?: number;
+    progress?: number;
+  } {
+    const status = this.statusStore.get(documentId);
+
     return (
-      this.statusStore.get(documentId) || {
+      status ?? {
         status: 'not_found',
         message: 'Document not in processing queue',
       }
