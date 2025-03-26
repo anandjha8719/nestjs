@@ -7,7 +7,7 @@ import {
 } from '@nestjs/swagger';
 
 export const ApiAuthController = () => {
-  return applyDecorators(ApiBearerAuth());
+  return applyDecorators(ApiBearerAuth('Authorization'));
 };
 
 export const ApiRegister = () => {

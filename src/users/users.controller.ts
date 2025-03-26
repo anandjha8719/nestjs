@@ -21,6 +21,7 @@ import {
   ApiGetUserById,
   ApiUpdateUser,
 } from './api-docs/users.swagger';
+import { ApiBearerAuth } from '@nestjs/swagger';
 
 @Controller('users')
 export class UsersController {
@@ -34,13 +35,13 @@ export class UsersController {
     return this.usersService.create(createUserDto);
   }
 
-  // TODO: lets add cursor based pagignation or remove
-  // @Get()
-  // @UseGuards(JwtAuthGuard, RolesGuard)
-  // @Roles(Role.ADMIN)
-  // findAll() {
-  //   return this.usersService.findAll();
-  // }
+  // TODO: lets add cursor based pagignation
+  @Get()
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(Role.ADMIN)
+  findAll() {
+    return this.usersService.findAll();
+  }
 
   @Get(':id')
   @UseGuards(JwtAuthGuard, RolesGuard)

@@ -39,10 +39,10 @@ export class UsersService {
     return result;
   }
 
-  // async findAll(): Promise<Omit<User, 'password'>[]> {
-  //   const users = await this.usersRepository.find();
-  //   return users.map(({ password, ...rest }) => rest);
-  // }
+  async findAll(): Promise<Omit<User, 'password'>[]> {
+    const users = await this.usersRepository.find();
+    return users.map(({ password, ...rest }) => rest);
+  }
 
   async findOne(id: number): Promise<Omit<User, 'password'>> {
     const user = await this.usersRepository.findOne({
@@ -53,13 +53,16 @@ export class UsersService {
       throw new NotFoundException(`User with ID ${id} not found`);
     }
 
-    const { password, ...result } = user;
-    return result;
+    return user;
   }
 
-  async findByEmail(email: string): Promise<User | null> {
+  async findByEmail(
+    email: string,
+    select?: (keyof User)[],
+  ): Promise<Partial<User> | null> {
     return this.usersRepository.findOne({
       where: { email },
+      select,
     });
   }
 

@@ -6,11 +6,10 @@ import {
   ApiParam,
   ApiBearerAuth,
 } from '@nestjs/swagger';
-import { CreateUserDto } from '../dto/create-user.dto';
 import { UpdateUserDto } from '../dto/update-user.dto';
 
 export const ApiAuth = () => {
-  return applyDecorators(ApiBearerAuth());
+  return applyDecorators(ApiBearerAuth('Authorization'));
 };
 
 export const ApiCreateUser = () => {

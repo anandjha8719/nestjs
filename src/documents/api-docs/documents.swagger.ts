@@ -10,7 +10,7 @@ import {
 import { UpdateDocumentDto } from '../dto/update-document.dto';
 
 export const ApiAuth = () => {
-  return applyDecorators(ApiBearerAuth());
+  return applyDecorators(ApiBearerAuth('Authorization'));
 };
 
 export const ApiUploadDocument = () => {
