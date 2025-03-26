@@ -23,7 +23,6 @@
 
 ![image](https://github.com/user-attachments/assets/46f80654-795a-4359-8477-37e5233ed763)
 
-
 ## Description
 
 [Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
@@ -34,11 +33,10 @@
 
 1. Clone the repository.
 2. Install dependencies:
+
    ```bash
    npm install
    ```
-
-
 
 3. Configure `.env` file as the .env.example.
 4. Start the server (main server and mock ingestion micro-service):
@@ -47,7 +45,6 @@
    npm run start:ingestion
    ```
 5. Access Swagger docs at `http://localhost:3000/api`.
-
 
 ## Run tests
 
@@ -61,8 +58,8 @@ $ npm run test:e2e
 # test coverage
 $ npm run test:cov
 ```
-## Document Management System
 
+## Document Management System
 
 ## **Project Setup & Basic Configuration**
 
@@ -72,7 +69,6 @@ $ npm run test:cov
   Integrated PostgreSQL with TypeORM for database management. Configured entities, repositories, and database connections.
 - **JWT Authentication**:
   Implemented JWT-based authentication using `@nestjs/jwt` and `passport-jwt`. Configured role-based access control (RBAC) via guards.
-
 
 ## **User & Authentication APIs**
 
@@ -85,8 +81,6 @@ $ npm run test:cov
   - Role-based route protection (e.g., Admins can delete documents).
 - **Database Models**:
   Created `User` entity with TypeORM, including `id`, `email`, `password`, `role`, and timestamps.
-
-
 
 ## **Document Management APIs**
 
@@ -101,8 +95,6 @@ $ npm run test:cov
   - `GET /documents/:id/status`: Get document Ingestion status.
 - **Database Integration**:
   Stored document metadata in PostgreSQL (neonDB) using TypeORM `Document` entity.
-
-
 
 # Document Ingestion System with NestJS Microservice
 
@@ -123,14 +115,14 @@ The application consists of two main components:
 
 The system uses NestJS's built-in microservice capabilities with TCP transport to facilitate communication between the main application and the ingestion service.
 
-
+```
 ┌─────────────────────┐         ┌─────────────────────┐
 │                     │         │                     │
 │     Main NestJS     │ ◄─────► │      Ingestion      │
 │     Application     │   TCP   │    Microservice     │
 │                     │         │                     │
 └─────────────────────┘         └─────────────────────┘
-
+```
 
 ## How It Works
 
@@ -160,7 +152,7 @@ The Ingestion Microservice:
 4. Randomly succeeds (80% chance) or fails (20% chance)
 5. Updates the document status in its internal storage
 
-```typescript
+````typescript
 const processingTime = 5000 + Math.random() * 5000;
 const willSucceed = Math.random() < 0.8;
 
@@ -181,7 +173,7 @@ async getIngestionStatus(id: number) {
   }
   return response;
 }
-```
+````
 
 ### 5. Retry Mechanism
 
@@ -281,6 +273,4 @@ The system implements:
 - **Load Testing**:
   Optional: Used tools like Artillery or Postman Runner for basic performance testing.
 
-
 **Technologies Used**: NestJS, TypeORM, PostgreSQL, JWT, Swagger, Jest.
-
