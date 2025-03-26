@@ -2,36 +2,59 @@
   <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
 </p>
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
 
 ![image](https://github.com/user-attachments/assets/46f80654-795a-4359-8477-37e5233ed763)
 
-## Description
+# **NestJS Backend – User & Document Management**  
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+This project is a **NestJS-based backend service** that manages **user authentication, document management, and ingestion controls**. It includes role-based access control and integrates with a Python backend (or a mock service) for document ingestion.  
 
-## Project setup
+## **Features**  
 
-## **How to Run**
+### **Authentication & User Management**  
+- **JWT-based authentication**: Register, login, and logout users securely.  
+- **Role-based access control (RBAC)**: Supports **Admin, Editor, and Viewer** roles.  
+- **User management APIs**: Admins can manage users, roles, and permissions.  
 
-1. Clone the repository.
+### **Document Management**  
+- **CRUD operations**: Upload, update, delete, and retrieve documents.  
+- **Metadata storage**: Document details are stored in a PostgreSQL database.  
+
+### **Ingestion Management & Python Integration**  
+- **Ingestion Trigger API**: Initiates document ingestion via a Python backend (or a mock service).  
+- **Ingestion Status API**: Tracks and retrieves ingestion progress.  
+- **Mock Python Service (Optional)**: Simulates ingestion behavior for testing without a real Python backend.  
+
+### **Additional Features**  
+- **Swagger** for API reference.  
+- **Unit tests** for key APIs to ensure reliability.  
+---
+
+## **Tech Stack**
+- **Backend**: NestJS (TypeScript)  
+- **Database**: PostgreSQL with Prisma/TypeORM  
+- **Authentication**: JWT & bcrypt  
+- **Storage**: Local or cloud-based document storage  
+- **Testing**: Jest (for unit testing)  
+- **API Documentation**: Swagger  
+
+---
+## **Project Setup**  
+
+### **Prerequisites**  
+Ensure you have the following installed:  
+- [Node.js](https://nodejs.org/) (v22.14.0)  
+- [Npm](https://www.npmjs.com/) (v10.9.2)  
+- [PostgreSQL](https://www.postgresql.org/) (Local or cloud)
+
+## **Installation**  
+
+1. **Clone the repository**  
+   ```sh
+   git clone git@github.com:anandjha8719/nestjs.git
+   cd nestjs
+
 2. Install dependencies:
 
    ```bash
@@ -46,20 +69,13 @@
    ```
 5. Access Swagger docs at `http://localhost:3000/api`.
 
-## Run tests
+## Run tests with coverage report
 
 ```bash
 # unit tests
 $ npm run test
 
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
 ```
-
-## Document Management System
 
 ## **Project Setup & Basic Configuration**
 
@@ -96,9 +112,9 @@ $ npm run test:cov
 - **Database Integration**:
   Stored document metadata in PostgreSQL (neonDB) using TypeORM `Document` entity.
 
-# Document Ingestion System with NestJS Microservice
+## Document Ingestion System with NestJS Microservice
 
-## Overview
+
 
 This project implements a document ingestion system using NestJS with a microservice architecture to simulate Python backend functionality. The system allows users to upload documents, process them through a simulated ingestion pipeline, and track the status of the ingestion process.
 
@@ -150,11 +166,12 @@ The Ingestion Microservice:
 2. Adds it to an in-memory processing queue
 3. Uses `setTimeout` to simulate processing time (5-10 seconds)
 4. Randomly succeeds (80% chance) or fails (20% chance)
+    
+    ````typescript
+    const processingTime = 5000 + Math.random() * 5000;
+    const willSucceed = Math.random() < 0.8;
+    ````
 5. Updates the document status in its internal storage
-
-````typescript
-const processingTime = 5000 + Math.random() * 5000;
-const willSucceed = Math.random() < 0.8;
 
 
 ### 4. Status Checking
@@ -225,21 +242,6 @@ private processingQueue = new Map<number, NodeJS.Timeout>();
 private statusStore = new Map<number, any>();
 ```
 
-## Running the Application
-
-The system requires two separate processes:
-
-1. The main NestJS application:
-
-   ```
-   npm run start
-   ```
-
-2. The ingestion microservice:
-   ```
-   npm run start:ingestion
-   ```
-
 ## Simulating Python Backend
 
 This implementation effectively simulates a Python backend by:
@@ -270,7 +272,40 @@ The system implements:
 - **Swagger Documentation**:
   Integrated Swagger/OpenAPI with `@nestjs/swagger` for auto-generated API docs.
   Added decorators (`@ApiTags`, `@ApiResponse`) and security definitions.
-- **Load Testing**:
-  Optional: Used tools like Artillery or Postman Runner for basic performance testing.
 
 **Technologies Used**: NestJS, TypeORM, PostgreSQL, JWT, Swagger, Jest.
+
+# **Improvement Areas & Future Enhancements**  
+
+Here are some obvious improvements that this project should have:  
+
+### **1. Implement Cursor-Based Pagination**  
+- Implementing cursor-based pagination will reduce the performance overhead of fetching records.  
+
+### **2. Enhanced Role-Based Access Control (RBAC)**  
+- Introduce **custom permissions** beyond predefined roles (Admin, Editor, Viewer).  
+
+### **3. Real-Time Ingestion Status Updates**  
+- Use **WebSockets** or **Server-Sent Events (SSE)** to provide real-time updates on document ingestion.  
+- This will remove the need for frequent polling and improve UX.  
+
+### **4. Rate Limiting & Throttling**  
+- Implement **rate limiting** using **NestJS Throttler** to prevent API abuse.  
+- Introduce **IP-based** or **user-based throttling** for better security.  
+
+### **5. Improved Logging & Monitoring**  
+- Integrate a logging system for structured logging.  
+- Add **Prometheus & Grafana** for real-time API monitoring.  
+- Store logs in a centralized service.  
+
+### **6. Background Job Processing for Ingestion**  
+- Move ingestion triggers to a **queue-based system** like **BullMQ (Redis-backed)**.  
+- Helps in handling **high workloads** efficiently.  
+
+### **7. Cloud Storage Integration**  
+- Instead of local storage, use a cloud based storage for files **AWS S3, Google Cloud Storage, or Azure Blob Storage**.  
+- Enhance document retrieval performance and scalability.  
+
+### **8. CI/CD Integration**  
+- Setup CI/CD for automated deployment and testing.  
+- Ensure **zero-downtime deployments** with proper rollback strategies. 
